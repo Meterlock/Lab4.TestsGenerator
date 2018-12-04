@@ -8,5 +8,11 @@ namespace TestsGeneratorLibrary
 {
     class MethodInfo
     {
+        public MethodInfo(string methodName)
+        {
+            MethodName = methodName;
+        }
+
+        public string MethodName { get; set; }
     }
 }
