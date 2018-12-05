@@ -7,7 +7,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace TestsGeneratorLibrary
 {
-    class TestsGenerator
+    public class TestsGenerator
     {
         public TestsGenerator(Config _config)
         {

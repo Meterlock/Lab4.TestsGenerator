@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace TestsGeneratorLibrary
 {
-    class SourceCodeParcer
+    public class SourceCodeParcer
     {
         public ParcingInfo Parce(string sourceCode)
         {

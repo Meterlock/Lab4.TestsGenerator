@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestsGeneratorLibrary
 {
-    class TestInfo
+    public class TestInfo
     {
         public TestInfo(string testName, string testContent)
         {

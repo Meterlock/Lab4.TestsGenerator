@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestsGeneratorLibrary
 {
-    class ParcingInfo
+    public class ParcingInfo
     {
         public ParcingInfo(List<ClassInfo> classes)
         {

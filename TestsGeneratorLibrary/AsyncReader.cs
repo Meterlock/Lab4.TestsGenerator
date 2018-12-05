@@ -7,9 +7,9 @@ using System.IO;
 
 namespace TestsGeneratorLibrary
 {
-    class AsyncReader
+    public static class AsyncReader
     {
-        public async Task<string> Read(string path)
+        public static async Task<string> Read(string path)
         {
             using (StreamReader strmReader = new StreamReader(path))
             {

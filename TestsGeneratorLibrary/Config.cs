@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestsGeneratorLibrary
 {
-    class Config
+    public class Config
     {
         public Config(int maxReadFiles, int maxProcessingTasks, int maxWriteFiles)
         {
