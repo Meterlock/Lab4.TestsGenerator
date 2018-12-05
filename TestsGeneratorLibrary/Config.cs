@@ -8,11 +8,11 @@ namespace TestsGeneratorLibrary
 {
     class Config
     {
-        public Config(int _MaxReadFiles, int _MaxProcessingTasks, int _MaxWriteFiles)
+        public Config(int maxReadFiles, int maxProcessingTasks, int maxWriteFiles)
         {
-            MaxReadFiles = _MaxReadFiles;
-            MaxProcessingTasks = _MaxProcessingTasks;
-            MaxWriteFiles = _MaxWriteFiles;
+            MaxReadFiles = maxReadFiles;
+            MaxProcessingTasks = maxProcessingTasks;
+            MaxWriteFiles = maxWriteFiles;
         }
 
         public int MaxReadFiles { get; set; }
