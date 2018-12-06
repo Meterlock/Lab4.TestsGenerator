@@ -206,6 +206,7 @@
     <Compile Include="ParcingInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceCodeParcer.cs" />
+    <Compile Include="TemplateGenerator.cs" />
     <Compile Include="TestInfo.cs" />
     <Compile Include="TestsGenerator.cs" />
   </ItemGroup>
