@@ -8,11 +8,11 @@ namespace TestsGeneratorLibrary
 {
     public class SourceCodeParcer
     {
-        public ParcingInfo Parce(string srcCode)
+        public List<ClassInfo> Parce(string srcCode)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(srcCode);
             CompilationUnitSyntax compilationUnit = tree.GetCompilationUnitRoot();
-            return new ParcingInfo(GetClasses(compilationUnit));
+            return GetClasses(compilationUnit);
         }
 
         private List<ClassInfo> GetClasses(CompilationUnitSyntax compilationUnit)
@@ -30,16 +30,16 @@ namespace TestsGeneratorLibrary
             return classes;
         }
 
-        private List<MethodInfo> GetMethods(ClassDeclarationSyntax classDecl)
+        private List<string> GetMethods(ClassDeclarationSyntax classDecl)
         {
             string methodName;
-            var classMethods = new List<MethodInfo>();
+            var classMethods = new List<string>();
             
             foreach (MethodDeclarationSyntax methodDecl in classDecl.DescendantNodes().OfType<MethodDeclarationSyntax>()
                 .Where(methodDecl => methodDecl.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.PublicKeyword))))
             {
                 methodName = methodDecl.Identifier.ValueText;
-                classMethods.Add(new MethodInfo(methodName));
+                classMethods.Add(methodName);
             }
 
             return classMethods;

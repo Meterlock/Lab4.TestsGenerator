@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,16 +8,16 @@ namespace TestsGeneratorLibrary
 {
     public class TemplateGenerator
     {
-        public List<TestInfo> MakeTemplates(ParcingInfo parsingInfo)
+        public List<TestInfo> MakeTemplates(List<ClassInfo> parsedClasses)
         {
-            string fileName, content;
-            List<TestInfo> res = new List<TestInfo>();
+            string content, fileName;
+            var res = new List<TestInfo>();
 
-            foreach (ClassInfo classInfo in parsingInfo.Classes)
+            foreach (ClassInfo classInfo in parsedClasses)
             {
                 CompilationUnitSyntax cus = CompilationUnit()
-                    .WithUsings(GetUsingDeclarations(classInfo))
-                    .WithMembers(SingletonList<MemberDeclarationSyntax>(GetNamespaceDeclaration(classInfo)
+                    .WithUsings(GetUsingDecl(classInfo))
+                    .WithMembers(SingletonList<MemberDeclarationSyntax>(GetNamespaceDecl(classInfo)
                         .WithMembers(SingletonList<MemberDeclarationSyntax>(ClassDeclaration(classInfo.ClassName + "Tests")
                             .WithAttributeLists(
                                 SingletonList<AttributeListSyntax>(
@@ -29,10 +25,8 @@ namespace TestsGeneratorLibrary
                                         SingletonSeparatedList<AttributeSyntax>(
                                             Attribute(
                                                 IdentifierName("TestClass"))))))
-                            .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
-                            .WithMembers(GetMembersDeclarations(classInfo))))
-                        )
-                     );
+                                                    .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
+                                                        .WithMembers(GetMembersDecl(classInfo))))));
 
                 fileName = classInfo.ClassName + "Test.cs";
                 content = cus.NormalizeWhitespace().ToFullString();
@@ -42,17 +36,16 @@ namespace TestsGeneratorLibrary
             return res;
         }
 
-        private NamespaceDeclarationSyntax GetNamespaceDeclaration(ClassInfo classInfo)
+        private NamespaceDeclarationSyntax GetNamespaceDecl(ClassInfo classInfo)
         {
             NamespaceDeclarationSyntax namespaceDecl = NamespaceDeclaration(QualifiedName(
                 IdentifierName(classInfo.ClassNamespace), IdentifierName("Tests")));
-
             return namespaceDecl;
         }
 
-        private SyntaxList<UsingDirectiveSyntax> GetUsingDeclarations(ClassInfo classInfo)
+        private SyntaxList<UsingDirectiveSyntax> GetUsingDecl(ClassInfo classInfo)
         {
-            List<UsingDirectiveSyntax> usings = new List<UsingDirectiveSyntax>();
+            var usings = new List<UsingDirectiveSyntax>();
 
             usings.Add(UsingDirective(IdentifierName("System")));
             usings.Add(UsingDirective(IdentifierName("System.Collections.Generic")));
@@ -64,22 +57,22 @@ namespace TestsGeneratorLibrary
             return new SyntaxList<UsingDirectiveSyntax>(usings);
         }
 
-        private SyntaxList<MemberDeclarationSyntax> GetMembersDeclarations(ClassInfo classInfo)
+        private SyntaxList<MemberDeclarationSyntax> GetMembersDecl(ClassInfo classInfo)
         {
-            List<MemberDeclarationSyntax> methods = new List<MemberDeclarationSyntax>();
+            var methods = new List<MemberDeclarationSyntax>();
 
-            foreach (MethodInfo methodInfo in classInfo.ClassMethods)
+            foreach (string methodName in classInfo.ClassMethods)
             {
-                methods.Add(GetMethodDeclaration(methodInfo));
+                methods.Add(GetMethodDeclaration(methodName));
             }
 
             return new SyntaxList<MemberDeclarationSyntax>(methods);
         }
 
-        private MethodDeclarationSyntax GetMethodDeclaration(MethodInfo method)
+        private MethodDeclarationSyntax GetMethodDeclaration(string method)
         {
             MethodDeclarationSyntax methodDecl;
-            List<StatementSyntax> bodyMembers = new List<StatementSyntax>();
+            var bodyMembers = new List<StatementSyntax>();
 
             bodyMembers.Add(
                 ExpressionStatement(
@@ -90,7 +83,7 @@ namespace TestsGeneratorLibrary
             methodDecl = MethodDeclaration(
                 PredefinedType(
                     Token(SyntaxKind.VoidKeyword)),
-                Identifier(method.MethodName + "Test"))
+                Identifier(method + "Test"))
                 .WithAttributeLists(
                     SingletonList<AttributeListSyntax>(
                         AttributeList(

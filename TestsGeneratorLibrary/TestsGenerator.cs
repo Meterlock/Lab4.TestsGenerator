@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
@@ -18,13 +16,13 @@ namespace TestsGeneratorLibrary
 
         public Task Generate(List<string> inputFiles, string outputPath)
         {
-            DataflowLinkOptions linkOptions = new DataflowLinkOptions();
+            var linkOptions = new DataflowLinkOptions();
             linkOptions.PropagateCompletion = true;
-            ExecutionDataflowBlockOptions readOptions = new ExecutionDataflowBlockOptions();
+            var readOptions = new ExecutionDataflowBlockOptions();
             readOptions.MaxDegreeOfParallelism = config.MaxReadFiles;
-            ExecutionDataflowBlockOptions processOptions = new ExecutionDataflowBlockOptions();
+            var processOptions = new ExecutionDataflowBlockOptions();
             processOptions.MaxDegreeOfParallelism = config.MaxProcessingTasks;
-            ExecutionDataflowBlockOptions writeOptions = new ExecutionDataflowBlockOptions();
+            var writeOptions = new ExecutionDataflowBlockOptions();
             writeOptions.MaxDegreeOfParallelism = config.MaxWriteFiles;
 
             TransformBlock<string, string> readBlock = new TransformBlock<string, string>(new Func<string, 
@@ -46,8 +44,8 @@ namespace TestsGeneratorLibrary
 
         private List<TestInfo> GenerateTests(string sourceCode)
         {
-            SourceCodeParcer parcer = new SourceCodeParcer();
-            ParcingInfo res = parcer.Parce(sourceCode);
+            var parcer = new SourceCodeParcer();
+            List<ClassInfo> res = parcer.Parce(sourceCode);
             // tests generation
             var tmplGenerator = new TemplateGenerator();
             List<TestInfo> tests = tmplGenerator.MakeTemplates(res);
