@@ -45,14 +45,15 @@ namespace TestsGeneratorLibrary
 
         private SyntaxList<UsingDirectiveSyntax> GetUsingDecl(ClassInfo classInfo)
         {
-            var usings = new List<UsingDirectiveSyntax>();
-
-            usings.Add(UsingDirective(IdentifierName("System")));
-            usings.Add(UsingDirective(IdentifierName("System.Collections.Generic")));
-            usings.Add(UsingDirective(IdentifierName("System.Linq")));
-            usings.Add(UsingDirective(IdentifierName("System.Text")));
-            usings.Add(UsingDirective(IdentifierName("Microsoft.VisualStudio.TestTools.UnitTesting")));
-            usings.Add(UsingDirective(IdentifierName(classInfo.ClassNamespace)));
+            var usings = new List<UsingDirectiveSyntax>()
+            {
+                UsingDirective(IdentifierName("System")),
+                UsingDirective(IdentifierName("System.Collections.Generic")),
+                UsingDirective(IdentifierName("System.Linq")),
+                UsingDirective(IdentifierName("System.Text")),
+                UsingDirective(IdentifierName("Microsoft.VisualStudio.TestTools.UnitTesting")),
+                UsingDirective(IdentifierName(classInfo.ClassNamespace))
+            };
 
             return new SyntaxList<UsingDirectiveSyntax>(usings);
         }

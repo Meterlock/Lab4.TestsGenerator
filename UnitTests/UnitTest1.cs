@@ -14,7 +14,7 @@ namespace UnitTests
         [TestInitialize]
         public void Initialize()
         {
-            string path = @"D:\УНИВЕР\5 семестр\СПП\Test\input\Writer.cs";
+            string path = "Writer.cs";
 
             int maxReadFiles = 2;
             int maxProcessingTasks = 3;

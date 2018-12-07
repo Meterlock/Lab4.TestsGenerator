@@ -14,7 +14,7 @@ namespace TestsGeneratorLibrary
 
         private Config config;
 
-        public Task Generate(List<string> inputFiles, string outputPath)
+        public async Task Generate(List<string> inputFiles, string outputPath)
         {
             var linkOptions = new DataflowLinkOptions();
             linkOptions.PropagateCompletion = true;
@@ -33,10 +33,10 @@ namespace TestsGeneratorLibrary
             processBlock.LinkTo(writeBlock, linkOptions);
             foreach (string file in inputFiles)
             {
-                readBlock.SendAsync(file);
+                readBlock.Post(file);
             }
             readBlock.Complete();
-            return writeBlock.Completion;
+            await writeBlock.Completion;
         }
 
         public List<TestInfo> GenerateTests(string sourceCode)
