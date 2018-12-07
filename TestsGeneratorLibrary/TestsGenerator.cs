@@ -25,12 +25,9 @@ namespace TestsGeneratorLibrary
             var writeOptions = new ExecutionDataflowBlockOptions();
             writeOptions.MaxDegreeOfParallelism = config.MaxWriteFiles;
 
-            TransformBlock<string, string> readBlock = new TransformBlock<string, string>(new Func<string, 
-                Task<string>>(AsyncReader.Read), readOptions);
-            TransformBlock<string, List<TestInfo>> processBlock = new TransformBlock<string, List<TestInfo>>
-                (new Func<string, List<TestInfo>>(GenerateTests), processOptions);
-            ActionBlock<List<TestInfo>> writeBlock = new ActionBlock<List<TestInfo>>
-                ((output => AsyncWriter.Write(outputPath, output).Wait()), writeOptions);
+            var readBlock = new TransformBlock<string, string>(new Func<string,Task<string>>(AsyncReader.Read), readOptions);
+            var processBlock = new TransformBlock<string, List<TestInfo>>(new Func<string, List<TestInfo>>(GenerateTests), processOptions);
+            var writeBlock = new ActionBlock<List<TestInfo>>((output => AsyncWriter.Write(outputPath, output).Wait()), writeOptions);
 
             readBlock.LinkTo(processBlock, linkOptions);
             processBlock.LinkTo(writeBlock, linkOptions);
@@ -42,7 +39,7 @@ namespace TestsGeneratorLibrary
             return writeBlock.Completion;
         }
 
-        private List<TestInfo> GenerateTests(string sourceCode)
+        public List<TestInfo> GenerateTests(string sourceCode)
         {
             var parcer = new SourceCodeParcer();
             List<ClassInfo> res = parcer.Parce(sourceCode);
